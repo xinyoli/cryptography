@@ -25,8 +25,10 @@ int main(int argc, char **argv){
 	aes.InputKey();
 	aes.FprintfKey();
 	
-	// aes.FprintfState();
+	aes.FprintfState();
 	aes.AddRoundKey();
+	aes.FprintfState();
+	aes.ByteSub();
 	aes.FprintfState();
 
 	

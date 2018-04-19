@@ -170,7 +170,7 @@ uint8_t AES::GF256MxDiv(uint8_t b){
 
 uint8_t AES::GF256Inv(uint8_t a){
 	uint8_t result = a;
-	for(int i=0; i<254; i++){
+	for(int i=0; i<253; i++){		// a^254 = a^-1
 		result = GF256Mult(result,a);
 	}
 	return result;
@@ -202,16 +202,9 @@ uint8_t AES::AffineTransf(uint8_t byte){
 	uint8_t result = 0x00;
 	for(int i=0; i<8; i++){
 		uint8_t temp = byte & mat[i];
-		fprintf(stderr, "temp = %02x\n", temp);
-		fprintf(stderr, "CountBitOdd(temp) = %d\n", CountBitOdd(temp));
-		fprintf(stderr, "transit[%d] = %d\n", i ,transit[i]);
-		fprintf(stderr, "CountBitOdd(temp) != transit[i] = %d\n", (CountBitOdd(temp) != transit[i]));
 		if((CountBitOdd(temp) != transit[i])){
 			result = result ^ digit;
 		}
-		fprintf(stderr, "digit = %02x\n", digit);
-		fprintf(stderr, "result = %02x\n", result);
-		cout << endl;
 		digit <<= 1;
 	}
 	return result;
@@ -219,7 +212,11 @@ uint8_t AES::AffineTransf(uint8_t byte){
 
 void AES::ByteSub(){
 	for(int i=0; i<block_size_; i++){
+		// fprintf(stderr, "state_[%d] = %02x\n", i,state_[i]);
 		state_[i] = GF256Inv(state_[i]);
+		// fprintf(stderr, "state_[%d] = %02x\n", i,state_[i]);
+		state_[i] = AffineTransf(state_[i]);
+		// fprintf(stderr, "state_[%d] = %02x\n\n", i,state_[i]);
 	}
 }
 
