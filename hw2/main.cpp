@@ -19,15 +19,16 @@ int main(int argc, char **argv){
 	AES aes;
 	aes.CoutSetting();
 	
-	// cout << "<AES Encryption>" << endl;
-	// aes.InputPlaintext();
-	// aes.FprintfPlaintext();
-	// aes.InputKey();
-	// aes.FprintfKey();
+	cout << "<AES Encryption>" << endl;
+	aes.InputPlaintext();
+	aes.FprintfPlaintext();
+	aes.InputKey();
+	aes.FprintfKey();
 	
-	uint8_t a = 7;
-	uint8_t b = 15;
-	fprintf(stderr, "%02x + %02x = %02x\n", a,b,GF256Add(a,b));
+	// aes.FprintfState();
+	aes.AddRoundKey();
+	aes.FprintfState();
+
 	
 	return 0;
 }
