@@ -34,6 +34,7 @@ private:
 	int block_size_;
 	int key_size_;
 	int num_of_round_;
+	uint8_t irr_poly_;
 	uint8_t* plaintext_;
 	uint8_t* key_;
 	uint8_t* ciphertext_;
@@ -41,6 +42,7 @@ private:
 public:
 	AES();
 	
+	uint8_t irr_poly();
 	void CoutSetting();
 	void FprintfPlaintext();
 	void FprintfKey();
@@ -48,7 +50,16 @@ public:
 	void InputPlaintext();
 	void InputKey();
 	
-	
+	// returns a + b.
+	uint8_t GF256Add(uint8_t a, uint8_t b);
+	// Multiplied by x. 
+	uint8_t GF256MultX(uint8_t a);
+	// General multiplication
+	uint8_t GF256Mult(uint8_t a, uint8_t b);
+	// return Mx divided by b;
+	uint8_t GF256MxDiv(uint8_t b);
+	// Returns the multiplicative inverse of a.
+	uint8_t GF256Inv(uint8_t b); 
 
 };
 
