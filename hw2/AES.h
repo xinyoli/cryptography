@@ -37,7 +37,9 @@ private:
 	uint8_t irr_poly_;
 	uint8_t* plaintext_;
 	uint8_t* key_;
+	uint8_t* round_key_;
 	uint8_t* ciphertext_;
+	uint8_t* state_;
 	
 public:
 	AES();
@@ -46,6 +48,7 @@ public:
 	void CoutSetting();
 	void FprintfPlaintext();
 	void FprintfKey();
+	void FprintfState();
 	
 	void InputPlaintext();
 	void InputKey();
@@ -59,7 +62,15 @@ public:
 	// return Mx divided by b;
 	uint8_t GF256MxDiv(uint8_t b);
 	// Returns the multiplicative inverse of a.
-	uint8_t GF256Inv(uint8_t b); 
+	uint8_t GF256Inv(uint8_t); 
+	
+	void AddRoundKey();
+	bool CountBitOdd(uint8_t);
+	uint8_t AffineTransf(uint8_t);
+	void ByteSub();
+	
+	// void AES_Encrypt();
+	// void AES_Decrypt(); 
 
 };
 

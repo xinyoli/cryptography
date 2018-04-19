@@ -47,10 +47,12 @@ AES::AES(){
 	irr_poly_ = 0x1b;
 	plaintext_ = static_cast<uint8_t*>(malloc(block_size_*sizeof(uint8_t)));
 	key_ = static_cast<uint8_t*>(malloc(key_size_*sizeof(uint8_t)));
+	round_key_ = static_cast<uint8_t*>(malloc(key_size_*sizeof(uint8_t)));
 	ciphertext_ = static_cast<uint8_t*>(malloc(block_size_*sizeof(uint8_t)));
 	for(int i=0; i<block_size_; i++){
 		ciphertext_[i] = 0;
 	}
+	state_ = static_cast<uint8_t*>(malloc(block_size_*sizeof(uint8_t)));
 }
 
 uint8_t AES::irr_poly(){
@@ -82,16 +84,29 @@ void AES::FprintfKey(){
 	fprintf(stderr, "%02x\n", key_[i]);
 }
 
+void AES::FprintfState(){
+	fprintf(stderr, "state = \t");
+	int i;
+	for(i = 0; i<15; i++){
+		fprintf(stderr, "%02x ", state_[i]);
+	}
+	fprintf(stderr, "%02x\n", state_[i]);
+}
+
 void AES::InputPlaintext(){
 	cout << "plaintext: \t";
 	InputFunction(plaintext_);
-	// FprintfHex(plaintext_);
+	for(int i=0; i<block_size_; i++){
+		state_[i] = plaintext_[i];
+	}
 }
 
 void AES::InputKey(){
 	cout << "key: \t\t";
 	InputFunction(key_);
-	// FprintfHex(key_);
+	for(int i=0; i<key_size_; i++){
+		round_key_[i] = key_[i];
+	}
 }
 
 uint8_t AES::GF256Add(uint8_t a, uint8_t b){
@@ -153,26 +168,66 @@ uint8_t AES::GF256MxDiv(uint8_t b){
 	return r;
 }
 
-// extended Eculidean 
-uint8_t AES::GF256Inv(uint8_t b){
-	// int i = 0;
-	// uint8_t s_old = 0x01;
-	// uint8_t t_old = 0x00;
-	// uint8_t r_old = irr_poly_;
-	// uint8_t s = 0x00;
-	// uint8_t t = 0x01;
-	// uint8_t r = b;
-	// uint8_t q = 0x00;
-	
-	// while(r != 0){
-		
-	// }
-	
-	uint8_t result = b;
+uint8_t AES::GF256Inv(uint8_t a){
+	uint8_t result = a;
 	for(int i=0; i<254; i++){
-		result = GF256Mult(result,b);
+		result = GF256Mult(result,a);
 	}
 	return result;
 }
 
+void AES::AddRoundKey(){
+	for(int i=0; i<block_size_; i++){
+		state_[i] = GF256Add(plaintext_[i],round_key_[i]);
+	}
+}
+
+bool AES::CountBitOdd(uint8_t x)
+{
+    x = (x & 0x55) + ((x & 0xaa) >> 1);
+    x = (x & 0x33) + ((x & 0xcc) >> 2);
+    x = (x & 0x0f) + ((x & 0xf0) >> 4);
+	if((x & 0x01) == 0){
+		return false;
+	}else{
+		return true;
+	}
+}
+
+uint8_t AES::AffineTransf(uint8_t byte){
+	uint8_t mat[8] = {0xf1, 0xe3, 0xc7, 0x8f, 0x1f, 0x3e, 0x7c, 0xf8};
+	// uint8_t transit = 0x63;
+	bool transit[8] = {1,1,0,0,0,1,1,0};
+	uint8_t digit = 0x01;
+	uint8_t result = 0x00;
+	for(int i=0; i<8; i++){
+		uint8_t temp = byte & mat[i];
+		fprintf(stderr, "temp = %02x\n", temp);
+		fprintf(stderr, "CountBitOdd(temp) = %d\n", CountBitOdd(temp));
+		fprintf(stderr, "transit[%d] = %d\n", i ,transit[i]);
+		fprintf(stderr, "CountBitOdd(temp) != transit[i] = %d\n", (CountBitOdd(temp) != transit[i]));
+		if((CountBitOdd(temp) != transit[i])){
+			result = result ^ digit;
+		}
+		fprintf(stderr, "digit = %02x\n", digit);
+		fprintf(stderr, "result = %02x\n", result);
+		cout << endl;
+		digit <<= 1;
+	}
+	return result;
+}
+
+void AES::ByteSub(){
+	for(int i=0; i<block_size_; i++){
+		state_[i] = GF256Inv(state_[i]);
+	}
+}
+
+// void AES::AES_Encrypt(){
+	
+// }
+
+// void AES::AES_Decrypt(){
+	
+// }
 
