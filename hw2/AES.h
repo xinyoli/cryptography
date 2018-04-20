@@ -68,6 +68,7 @@ public:
 	bool CountBitOdd(uint8_t);
 	uint8_t AffineTransf(uint8_t);
 	void ByteSub();
+	void ShiftRows();
 	
 	// void AES_Encrypt();
 	// void AES_Decrypt(); 

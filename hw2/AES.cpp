@@ -212,11 +212,36 @@ uint8_t AES::AffineTransf(uint8_t byte){
 
 void AES::ByteSub(){
 	for(int i=0; i<block_size_; i++){
-		// fprintf(stderr, "state_[%d] = %02x\n", i,state_[i]);
 		state_[i] = GF256Inv(state_[i]);
-		// fprintf(stderr, "state_[%d] = %02x\n", i,state_[i]);
 		state_[i] = AffineTransf(state_[i]);
-		// fprintf(stderr, "state_[%d] = %02x\n\n", i,state_[i]);
+	}
+}
+
+void AES::ShiftRows(){
+	uint8_t* temp_state = static_cast<uint8_t*>(malloc(block_size_*sizeof(uint8_t)));
+	
+	// row0
+	for(int i=0; i<4; i++){
+		temp_state[i] = state_[i];
+	}
+	// row1
+	temp_state[4] = state_[5];
+	temp_state[5] = state_[6];
+	temp_state[6] = state_[7];
+	temp_state[7] = state_[4];
+	// row2
+	temp_state[8] = state_[10];
+	temp_state[9] = state_[11];
+	temp_state[10] = state_[8];
+	temp_state[11] = state_[9];
+	// row3
+	temp_state[12] = state_[15];
+	temp_state[13] = state_[12];
+	temp_state[14] = state_[13];
+	temp_state[15] = state_[14];
+	
+	for(int i=0; i<block_size_; i++){
+		state_[i] = temp_state[i];
 	}
 }
 

@@ -30,6 +30,8 @@ int main(int argc, char **argv){
 	aes.FprintfState();
 	aes.ByteSub();
 	aes.FprintfState();
+	aes.ShiftRows();
+	aes.FprintfState();
 
 	
 	return 0;
