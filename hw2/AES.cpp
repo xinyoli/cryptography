@@ -33,17 +33,18 @@ void InputFunction(uint8_t* input){
 }
 
 void PrintfHex(uint8_t* byte_arr){
-	int i;
-	for(i = 0; i<15; i++){
-		printf("%02x ", byte_arr[i]);
-	}
-	printf("%02x\n", byte_arr[i]);
-	
-	// for(int i =0; i<4; i++){
-		// for(int j=0; j<4; j++){
-			// printf("%02x ", byte_arr[4*i+j]);
-		// }
+	// int i;
+	// for(i = 0; i<15; i++){
+		// printf("%02x ", byte_arr[i]);
 	// }
+	// printf("%02x\n", byte_arr[i]);
+	
+	for(int i =0; i<4; i++){
+		for(int j=0; j<4; j++){
+			printf("%02x ", byte_arr[i+4*j]);
+		}
+	}
+	printf("\n");
 }
 
 
@@ -115,29 +116,33 @@ void AES::CoutSetting(){
 
 void AES::FprintfPlaintext(){
 	printf("plaintext = \t");
-	int i;
-	for(i = 0; i<15; i++){
-		printf("%02x ", plaintext_[i]);
-	}
-	printf("%02x\n", plaintext_[i]);
+	// int i;
+	// for(i = 0; i<15; i++){
+		// printf("%02x ", plaintext_[i]);
+	// }
+	// printf("%02x\n", plaintext_[i]);
+	PrintfHex(plaintext_);
 }
 
 void AES::FprintfKey(){
 	printf("Key = \t\t");
-	int i;
-	for(i = 0; i<15; i++){
-		printf("%02x ", key_[i]);
-	}
-	printf("%02x\n", key_[i]);
+	// int i;
+	// for(i = 0; i<15; i++){
+		// printf("%02x ", key_[i]);
+	// }
+	// printf("%02x\n", key_[i]);
+	PrintfHex(key_);
 }
 
 void AES::PrintfState(){
-	printf("%s", "state = \t");
-	int i;
-	for(i = 0; i<15; i++){
-		printf("%02x ", state_[i]);
-	}
-	printf("%02x\n", state_[i]);
+	// printf("%s", "state = \t");
+	printf("%s", "= \t");
+	// int i;
+	// for(i = 0; i<15; i++){
+		// printf("%02x ", state_[i]);
+	// }
+	// printf("%02x\n", state_[i]);
+	PrintfHex(state_);
 }
 
 void AES::InputPlaintext(){

@@ -18,30 +18,6 @@ int main(int argc, char **argv){
 	
 	AES aes;
 	aes.CoutSetting();
-	
-	// cout << "<AES Encryption>" << endl;
-	// aes.InputPlaintext();
-	// aes.FprintfPlaintext();
-	// aes.InputKey();
-	// aes.FprintfKey();
-	
-	// aes.InitState();
-	// aes.InitRoundKey();
-	// cout << "Init ";
-	// aes.PrintfState();
-	// aes.AddRoundKey();
-	// cout << "S" << aes.round() << " ";
-	// aes.PrintfState();
-	// cout << "Round " << aes.round() << ": \n";
-	// aes.ByteSub();
-	// cout << "ByteSub ";
-	// aes.PrintfState();
-	// aes.ShiftRows();
-	// cout << "ShiftRows ";
-	// aes.PrintfState();
-	// aes.MixColumns();
-	// cout << "MixColumns ";
-	// aes.PrintfState();
 
 	aes.AES_Encrypt();
 	
