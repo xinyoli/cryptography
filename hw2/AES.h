@@ -34,6 +34,7 @@ private:
 	int block_size_;
 	int key_size_;
 	int num_of_round_;
+	int round_;
 	uint8_t irr_poly_;
 	uint8_t* plaintext_;
 	uint8_t* key_;
@@ -45,6 +46,7 @@ public:
 	AES();
 	
 	uint8_t irr_poly();
+	int round();
 	void CoutSetting();
 	void FprintfPlaintext();
 	void FprintfKey();
@@ -70,11 +72,12 @@ public:
 	bool CountBitOdd(uint8_t);
 	uint8_t AffineTransf(uint8_t);
 	void ByteSub();
+	uint8_t ByteSub(uint8_t);
 	void ShiftRows();
 	void MixColumns();
-	// void KeyExpansion();
+	void KeyExpansion();
 	
-	// void AES_Encrypt();
+	void AES_Encrypt();
 	// void AES_Decrypt(); 
 
 };

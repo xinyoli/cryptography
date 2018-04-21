@@ -19,30 +19,31 @@ int main(int argc, char **argv){
 	AES aes;
 	aes.CoutSetting();
 	
-	cout << "<AES Encryption>" << endl;
+	// cout << "<AES Encryption>" << endl;
 	// aes.InputPlaintext();
-	aes.FprintfPlaintext();
+	// aes.FprintfPlaintext();
 	// aes.InputKey();
-	aes.FprintfKey();
+	// aes.FprintfKey();
 	
-	aes.InitState();
-	aes.InitRoundKey();
-	cout << "Init ";
-	aes.PrintfState();
-	aes.AddRoundKey();
-	cout << "S0 ";
-	aes.PrintfState();
-	cout << "Round 1:\n";
-	aes.ByteSub();
-	cout << "ByteSub ";
-	aes.PrintfState();
-	aes.ShiftRows();
-	cout << "ShiftRows ";
-	aes.PrintfState();
-	aes.MixColumns();
-	cout << "MixColumns ";
-	aes.PrintfState();
+	// aes.InitState();
+	// aes.InitRoundKey();
+	// cout << "Init ";
+	// aes.PrintfState();
+	// aes.AddRoundKey();
+	// cout << "S" << aes.round() << " ";
+	// aes.PrintfState();
+	// cout << "Round " << aes.round() << ": \n";
+	// aes.ByteSub();
+	// cout << "ByteSub ";
+	// aes.PrintfState();
+	// aes.ShiftRows();
+	// cout << "ShiftRows ";
+	// aes.PrintfState();
+	// aes.MixColumns();
+	// cout << "MixColumns ";
+	// aes.PrintfState();
 
+	aes.AES_Encrypt();
 	
 	return 0;
 }
