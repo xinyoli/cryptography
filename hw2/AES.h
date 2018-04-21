@@ -57,6 +57,7 @@ public:
 	void InputPlaintext();
 	void InputKey();
 	void InitState();
+	void InitCipherState();
 	void InitRoundKey();
 	
 	// returns a + b.
@@ -70,17 +71,20 @@ public:
 	// Returns the multiplicative inverse of a.
 	uint8_t GF256Inv(uint8_t); 
 	
-	void AddRoundKey();
+	void AddRoundKey(int);
 	bool CountBitOdd(uint8_t);
 	uint8_t AffineTransf(uint8_t);
+	uint8_t InvAffineTransf(uint8_t);
 	void ByteSub();
+	void InvByteSub();
 	uint8_t ByteSub(uint8_t);
 	void ShiftRows();
+	void InvShiftRows();
 	void MixColumns();
 	void KeyExpansion();
 	
 	void AES_Encrypt();
-	// void AES_Decrypt(); 
+	void AES_Decrypt(); 
 
 };
 

@@ -14,12 +14,13 @@ using namespace std;
 
 int main(int argc, char **argv){
 	
-	cout << "main.out start!!!" << endl;
+	cout << "<AES>" << endl;
 	
 	AES aes;
 	aes.CoutSetting();
 
 	aes.AES_Encrypt();
+	aes.AES_Decrypt();
 	
 	return 0;
 }
