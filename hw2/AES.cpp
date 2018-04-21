@@ -33,12 +33,6 @@ void InputFunction(uint8_t* input){
 }
 
 void PrintfHex(uint8_t* byte_arr){
-	// int i;
-	// for(i = 0; i<15; i++){
-		// printf("%02x ", byte_arr[i]);
-	// }
-	// printf("%02x\n", byte_arr[i]);
-	
 	for(int i =0; i<4; i++){
 		for(int j=0; j<4; j++){
 			printf("%02x ", byte_arr[i+4*j]);
@@ -116,32 +110,17 @@ void AES::CoutSetting(){
 
 void AES::FprintfPlaintext(){
 	printf("plaintext = \t");
-	// int i;
-	// for(i = 0; i<15; i++){
-		// printf("%02x ", plaintext_[i]);
-	// }
-	// printf("%02x\n", plaintext_[i]);
 	PrintfHex(plaintext_);
 }
 
 void AES::FprintfKey(){
 	printf("Key = \t\t");
-	// int i;
-	// for(i = 0; i<15; i++){
-		// printf("%02x ", key_[i]);
-	// }
-	// printf("%02x\n", key_[i]);
 	PrintfHex(key_);
 }
 
 void AES::PrintfState(){
 	// printf("%s", "state = \t");
 	printf("%s", "= \t");
-	// int i;
-	// for(i = 0; i<15; i++){
-		// printf("%02x ", state_[i]);
-	// }
-	// printf("%02x\n", state_[i]);
 	PrintfHex(state_);
 }
 
@@ -347,7 +326,7 @@ void AES::KeyExpansion(){
 		temp_word[i] = ByteSub(temp_word[i]);
 	}
 	
-	temp_word[0] ^= RC[round_];
+	temp_word[0] ^= RC[round_-1];
 	
 	// xor
 	for(int i=0; i<4; i++){		// first column
@@ -373,23 +352,56 @@ void AES::AES_Encrypt(){
 	cout << "Init ";
 	PrintfState();
 	AddRoundKey();
-	cout << "S" << round() << " ";
+	cout << "S" << round_ << " ";
 	PrintfState();
-	cout << "Round " << round() << ": \n";
+	++round_;
+	
+	while(round_ < 10){
+		cout << "Round " << round_ << ": \n";
+		ByteSub();
+		cout << "ByteSub ";
+		PrintfState();
+		ShiftRows();
+		cout << "ShiftRows ";
+		PrintfState();
+		MixColumns();
+		cout << "MixColumns ";
+		PrintfState();
+		KeyExpansion();
+		AddRoundKey();
+		cout << "S" << round_ << " ";
+		PrintfState();
+		++round_;
+	}
+	
+	// final round
+	cout << "Round " << round_ << ": \n";
 	ByteSub();
 	cout << "ByteSub ";
 	PrintfState();
 	ShiftRows();
 	cout << "ShiftRows ";
 	PrintfState();
-	MixColumns();
-	cout << "MixColumns ";
-	PrintfState();
 	KeyExpansion();
 	AddRoundKey();
-	++round_;
-	cout << "S" << round() << " ";
+	cout << "S" << round_ << " ";
 	PrintfState();
+	
+	// cout << "Round " << round() << ": \n";
+	// ByteSub();
+	// cout << "ByteSub ";
+	// PrintfState();
+	// ShiftRows();
+	// cout << "ShiftRows ";
+	// PrintfState();
+	// MixColumns();
+	// cout << "MixColumns ";
+	// PrintfState();
+	// KeyExpansion();
+	// AddRoundKey();
+	// ++round_;
+	// cout << "S" << round() << " ";
+	// PrintfState();
 }
 
 // void AES::AES_Decrypt(){
