@@ -349,24 +349,24 @@ void AES::AES_Encrypt(){
 	
 	InitState();
 	InitRoundKey();
-	cout << "Init ";
-	PrintfState();
+	// cout << "Init ";
+	// PrintfState();
 	AddRoundKey();
 	cout << "S" << round_ << " ";
 	PrintfState();
 	++round_;
 	
 	while(round_ < 10){
-		cout << "Round " << round_ << ": \n";
+		// cout << "Round " << round_ << ": \n";
 		ByteSub();
-		cout << "ByteSub ";
-		PrintfState();
+		// cout << "ByteSub ";
+		// PrintfState();
 		ShiftRows();
-		cout << "ShiftRows ";
-		PrintfState();
+		// cout << "ShiftRows ";
+		// PrintfState();
 		MixColumns();
-		cout << "MixColumns ";
-		PrintfState();
+		// cout << "MixColumns ";
+		// PrintfState();
 		KeyExpansion();
 		AddRoundKey();
 		cout << "S" << round_ << " ";
@@ -375,33 +375,17 @@ void AES::AES_Encrypt(){
 	}
 	
 	// final round
-	cout << "Round " << round_ << ": \n";
+	// cout << "Round " << round_ << ": \n";
 	ByteSub();
-	cout << "ByteSub ";
-	PrintfState();
-	ShiftRows();
-	cout << "ShiftRows ";
-	PrintfState();
-	KeyExpansion();
-	AddRoundKey();
-	cout << "S" << round_ << " ";
-	PrintfState();
-	
-	// cout << "Round " << round() << ": \n";
-	// ByteSub();
 	// cout << "ByteSub ";
 	// PrintfState();
-	// ShiftRows();
+	ShiftRows();
 	// cout << "ShiftRows ";
 	// PrintfState();
-	// MixColumns();
-	// cout << "MixColumns ";
-	// PrintfState();
-	// KeyExpansion();
-	// AddRoundKey();
-	// ++round_;
-	// cout << "S" << round() << " ";
-	// PrintfState();
+	KeyExpansion();
+	AddRoundKey();
+	cout << "Ciphertext: ";
+	PrintfState();
 }
 
 // void AES::AES_Decrypt(){
