@@ -51,7 +51,11 @@ AES::AES(){
 	irr_poly_ = 0x1b;
 	plaintext_ = static_cast<uint8_t*>(malloc(block_size_*sizeof(uint8_t)));
 	key_ = static_cast<uint8_t*>(malloc(key_size_*sizeof(uint8_t)));
-	round_key_ = static_cast<uint8_t*>(malloc(key_size_*sizeof(uint8_t)));
+	// round_key_ = static_cast<uint8_t*>(malloc(key_size_*sizeof(uint8_t)));
+	key_vect_.resize(11);
+	for(int i=0; i<11; i++){
+		key_vect_[i] = static_cast<uint8_t*>(malloc(key_size_*sizeof(uint8_t)));
+	}
 	ciphertext_ = static_cast<uint8_t*>(malloc(block_size_*sizeof(uint8_t)));
 	for(int i=0; i<block_size_; i++){
 		ciphertext_[i] = 0;
@@ -124,6 +128,11 @@ void AES::PrintfState(){
 	PrintfHex(state_);
 }
 
+void AES::PrintfCipher(){
+	printf("Ciphertext: ");
+	PrintfHex(ciphertext_);
+}
+
 void AES::InputPlaintext(){
 	cout << "plaintext: \t";
 	InputFunction(plaintext_);
@@ -136,7 +145,7 @@ void AES::InputKey(){
 	cout << "key: \t\t";
 	InputFunction(key_);
 	// for(int i=0; i<key_size_; i++){
-		// round_key_[i] = key_[i];
+		// key_vect_[0][i] = key_[i];
 	// }
 }
 
@@ -148,7 +157,7 @@ void AES::InitState(){
 
 void AES::InitRoundKey(){
 	for(int i=0; i<key_size_; i++){
-		round_key_[i] = key_[i];
+		key_vect_[0][i] = key_[i];
 	}
 }
 
@@ -221,7 +230,7 @@ uint8_t AES::GF256Inv(uint8_t a){
 
 void AES::AddRoundKey(){
 	for(int i=0; i<block_size_; i++){
-		state_[i] = GF256Add(state_[i],round_key_[i]);
+		state_[i] = GF256Add(state_[i],key_vect_[round_][i]);
 	}
 }
 
@@ -317,10 +326,10 @@ void AES::KeyExpansion(){
 	uint8_t RC[10] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80,0x1b,0x36};
 
 	// RotWord
-	temp_word[0] = round_key_[7];
-	temp_word[1] = round_key_[11];
-	temp_word[2] = round_key_[15];
-	temp_word[3] = round_key_[3];
+	temp_word[0] = key_vect_[round_-1][7];
+	temp_word[1] = key_vect_[round_-1][11];
+	temp_word[2] = key_vect_[round_-1][15];
+	temp_word[3] = key_vect_[round_-1][3];
 	
 	for(int i=0; i<4; i++){
 		temp_word[i] = ByteSub(temp_word[i]);
@@ -330,12 +339,12 @@ void AES::KeyExpansion(){
 	
 	// xor
 	for(int i=0; i<4; i++){		// first column
-		round_key_[4*i] ^= temp_word[i];
+		key_vect_[round_][4*i] = key_vect_[round_-1][4*i] ^ temp_word[i];
 	}
 	
 	for(int i=1; i<4; i++){		// column
 		for(int j=0; j<4; j++){ // row
-			round_key_[i + 4*j] ^= round_key_[i-1 + 4*j];
+			key_vect_[round_][i + 4*j] = key_vect_[round_-1][i + 4*j] ^ key_vect_[round_][i-1 + 4*j];
 		}
 	}
 }
@@ -384,8 +393,10 @@ void AES::AES_Encrypt(){
 	// PrintfState();
 	KeyExpansion();
 	AddRoundKey();
-	cout << "Ciphertext: ";
-	PrintfState();
+	for(int i=0; i<block_size_; i++){
+		ciphertext_[i] = state_[i];
+	}
+	PrintfCipher();
 }
 
 // void AES::AES_Decrypt(){

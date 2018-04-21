@@ -17,6 +17,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
 #include <math.h>
 #include <stdint.h>		// for uint8_t
 
@@ -25,7 +26,6 @@ using namespace std;
 
 void InputFunction(uint8_t*);
 void PrintfHex(uint8_t*);
-// void InitByteArray(uint8_t*);
 
 
 class AES{
@@ -38,7 +38,8 @@ private:
 	uint8_t irr_poly_;
 	uint8_t* plaintext_;
 	uint8_t* key_;
-	uint8_t* round_key_;
+	// uint8_t* round_key_;
+	vector<uint8_t*> key_vect_;
 	uint8_t* ciphertext_;
 	uint8_t* state_;
 	
@@ -51,6 +52,7 @@ public:
 	void FprintfPlaintext();
 	void FprintfKey();
 	void PrintfState();
+	void PrintfCipher();
 	
 	void InputPlaintext();
 	void InputKey();
