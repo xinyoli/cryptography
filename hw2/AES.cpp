@@ -24,8 +24,10 @@ void InputFunction(uint8_t* input){
 		if(temp[c] >= '0' && temp[c] <= '9') temp1[c]= temp[c]-'0'; 
 		if(temp[c] >= 'a' && temp[c] <= 'f') temp1[c]= 10+temp[c]-'a'; 
 		if(temp[c] >= 'A' && temp[c] <= 'F') temp1[c]= 10+temp[c]-'A'; 
-		for(i=0;i<16;i++){ 
-			input[i]=((16*temp1[3*i])+temp1[3*i+1]);     //transform to binary 
+		for(i=0; i<4; i++){
+			for(int j=0; j<4; j++){
+				input[4*i+j] = ((16*temp1[3*(4*j+i)])+temp1[3*(4*j+i)+1]);     //transform to binary 
+			}
 		}
 	}         
 }
@@ -36,6 +38,12 @@ void FprintfHex(uint8_t* byte_arr){
 		fprintf(stderr, "%02x ", byte_arr[i]);
 	}
 	fprintf(stderr, "%02x\n", byte_arr[i]);
+	
+	// for(int i =0; i<4; i++){
+		// for(int j=0; j<4; j++){
+			// fprintf(stderr, "%02x ", byte_arr[4*i+j]);
+		// }
+	// }
 }
 
 
@@ -53,6 +61,40 @@ AES::AES(){
 		ciphertext_[i] = 0;
 	}
 	state_ = static_cast<uint8_t*>(malloc(block_size_*sizeof(uint8_t)));
+	
+	plaintext_[0] = 0xa3;
+	plaintext_[4] = 0xc5; 
+	plaintext_[8] = 0x08; 
+	plaintext_[12] = 0x08; 
+	plaintext_[1] = 0x78; 
+	plaintext_[5] = 0xa4; 
+	plaintext_[9] = 0xff; 
+	plaintext_[13] = 0xd3; 
+	plaintext_[2] = 0x00; 
+	plaintext_[6] = 0xff; 
+	plaintext_[10] = 0x36; 
+	plaintext_[14] = 0x36; 
+	plaintext_[3] = 0x28; 
+	plaintext_[7] = 0x5f; 
+	plaintext_[11] = 0x01; 
+	plaintext_[15] = 0x02;
+	
+	key_[0] = 0x36;
+	key_[4] = 0x8a; 
+	key_[8] = 0xc0; 
+	key_[12]= 0xf4; 
+	key_[1] = 0xed; 
+	key_[5] = 0xcf; 
+	key_[9] = 0x76; 
+	key_[13]= 0xa6; 
+	key_[2] = 0x08; 
+	key_[6] = 0xa3; 
+	key_[10]= 0xb6; 
+	key_[14]= 0x78; 
+	key_[3] = 0x31; 
+	key_[7] = 0x31; 
+	key_[11]= 0x27; 
+	key_[15]= 0x6e;
 }
 
 uint8_t AES::irr_poly(){
@@ -96,14 +138,26 @@ void AES::FprintfState(){
 void AES::InputPlaintext(){
 	cout << "plaintext: \t";
 	InputFunction(plaintext_);
-	for(int i=0; i<block_size_; i++){
-		state_[i] = plaintext_[i];
-	}
+	// for(int i=0; i<block_size_; i++){
+		// state_[i] = plaintext_[i];
+	// }
 }
 
 void AES::InputKey(){
 	cout << "key: \t\t";
 	InputFunction(key_);
+	// for(int i=0; i<key_size_; i++){
+		// round_key_[i] = key_[i];
+	// }
+}
+
+void AES::InitState(){
+	for(int i=0; i<block_size_; i++){
+		state_[i] = plaintext_[i];
+	}
+}
+
+void AES::InitRoundKey(){
 	for(int i=0; i<key_size_; i++){
 		round_key_[i] = key_[i];
 	}
@@ -240,6 +294,25 @@ void AES::ShiftRows(){
 	temp_state[14] = state_[13];
 	temp_state[15] = state_[14];
 	
+	for(int i=0; i<block_size_; i++){
+		state_[i] = temp_state[i];
+	}
+}
+
+void AES::MixColumns(){
+	uint8_t mat[4] = {0x02,0x03,0x01,0x01};
+	uint8_t* temp_state = static_cast<uint8_t*>(malloc(block_size_*sizeof(uint8_t)));
+	for(int i=0; i<16; i++){
+		uint8_t temp;
+		temp = GF256Mult(mat[(0+3*(i%4))%4],state_[(i%4)+0]);
+		temp_state[i] = GF256Add(temp_state[i],temp);
+		temp = GF256Mult(mat[(1+3*(i%4))%4],state_[(i%4)+4]);
+		temp_state[i] = GF256Add(temp_state[i],temp);
+		temp = GF256Mult(mat[(2+3*(i%4))%4],state_[(i%4)+8]);
+		temp_state[i] = GF256Add(temp_state[i],temp);
+		temp = GF256Mult(mat[(3+3*(i%4))%4],state_[(i%4)+12]);
+		temp_state[i] = GF256Add(temp_state[i],temp);
+	}
 	for(int i=0; i<block_size_; i++){
 		state_[i] = temp_state[i];
 	}

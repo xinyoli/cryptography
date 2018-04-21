@@ -20,17 +20,22 @@ int main(int argc, char **argv){
 	aes.CoutSetting();
 	
 	cout << "<AES Encryption>" << endl;
-	aes.InputPlaintext();
+	// aes.InputPlaintext();
 	aes.FprintfPlaintext();
-	aes.InputKey();
+	// aes.InputKey();
 	aes.FprintfKey();
 	
+	aes.InitState();
+	aes.InitRoundKey();
+	cout << "S0 ";
 	aes.FprintfState();
 	aes.AddRoundKey();
 	aes.FprintfState();
 	aes.ByteSub();
 	aes.FprintfState();
 	aes.ShiftRows();
+	aes.FprintfState();
+	aes.MixColumns();
 	aes.FprintfState();
 
 	

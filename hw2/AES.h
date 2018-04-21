@@ -52,6 +52,8 @@ public:
 	
 	void InputPlaintext();
 	void InputKey();
+	void InitState();
+	void InitRoundKey();
 	
 	// returns a + b.
 	uint8_t GF256Add(uint8_t a, uint8_t b);
@@ -69,6 +71,7 @@ public:
 	uint8_t AffineTransf(uint8_t);
 	void ByteSub();
 	void ShiftRows();
+	void MixColumns();
 	
 	// void AES_Encrypt();
 	// void AES_Decrypt(); 
