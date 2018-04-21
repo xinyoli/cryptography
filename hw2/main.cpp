@@ -27,16 +27,21 @@ int main(int argc, char **argv){
 	
 	aes.InitState();
 	aes.InitRoundKey();
-	cout << "S0 ";
-	aes.FprintfState();
+	cout << "Init ";
+	aes.PrintfState();
 	aes.AddRoundKey();
-	aes.FprintfState();
+	cout << "S0 ";
+	aes.PrintfState();
+	cout << "Round 1:\n";
 	aes.ByteSub();
-	aes.FprintfState();
+	cout << "ByteSub ";
+	aes.PrintfState();
 	aes.ShiftRows();
-	aes.FprintfState();
+	cout << "ShiftRows ";
+	aes.PrintfState();
 	aes.MixColumns();
-	aes.FprintfState();
+	cout << "MixColumns ";
+	aes.PrintfState();
 
 	
 	return 0;

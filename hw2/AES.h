@@ -24,7 +24,7 @@ using namespace std;
 
 
 void InputFunction(uint8_t*);
-void FprintfHex(uint8_t*);
+void PrintfHex(uint8_t*);
 // void InitByteArray(uint8_t*);
 
 
@@ -48,7 +48,7 @@ public:
 	void CoutSetting();
 	void FprintfPlaintext();
 	void FprintfKey();
-	void FprintfState();
+	void PrintfState();
 	
 	void InputPlaintext();
 	void InputKey();
