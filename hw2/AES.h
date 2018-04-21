@@ -72,6 +72,7 @@ public:
 	void ByteSub();
 	void ShiftRows();
 	void MixColumns();
+	// void KeyExpansion();
 	
 	// void AES_Encrypt();
 	// void AES_Decrypt(); 

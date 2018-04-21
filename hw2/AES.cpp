@@ -304,19 +304,21 @@ void AES::MixColumns(){
 	uint8_t* temp_state = static_cast<uint8_t*>(malloc(block_size_*sizeof(uint8_t)));
 	for(int i=0; i<16; i++){
 		uint8_t temp;
-		temp = GF256Mult(mat[(0+3*(i%4))%4],state_[(i%4)+0]);
+		temp = GF256Mult(mat[(0+3*(i/4))%4],state_[(i%4)+0]);
 		temp_state[i] = GF256Add(temp_state[i],temp);
-		temp = GF256Mult(mat[(1+3*(i%4))%4],state_[(i%4)+4]);
+		temp = GF256Mult(mat[(1+3*(i/4))%4],state_[(i%4)+4]);
 		temp_state[i] = GF256Add(temp_state[i],temp);
-		temp = GF256Mult(mat[(2+3*(i%4))%4],state_[(i%4)+8]);
+		temp = GF256Mult(mat[(2+3*(i/4))%4],state_[(i%4)+8]);
 		temp_state[i] = GF256Add(temp_state[i],temp);
-		temp = GF256Mult(mat[(3+3*(i%4))%4],state_[(i%4)+12]);
+		temp = GF256Mult(mat[(3+3*(i/4))%4],state_[(i%4)+12]);
 		temp_state[i] = GF256Add(temp_state[i],temp);
 	}
 	for(int i=0; i<block_size_; i++){
 		state_[i] = temp_state[i];
 	}
 }
+
+void KeyExpansion();
 
 // void AES::AES_Encrypt(){
 	
