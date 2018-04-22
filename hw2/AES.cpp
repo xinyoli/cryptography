@@ -61,39 +61,39 @@ AES::AES(){
 	}
 	state_ = static_cast<uint8_t*>(malloc(block_size_*sizeof(uint8_t)));
 	
-	plaintext_[0] = 0xa3;
-	plaintext_[4] = 0xc5; 
-	plaintext_[8] = 0x08; 
-	plaintext_[12] = 0x08; 
-	plaintext_[1] = 0x78; 
-	plaintext_[5] = 0xa4; 
-	plaintext_[9] = 0xff; 
-	plaintext_[13] = 0xd3; 
-	plaintext_[2] = 0x00; 
-	plaintext_[6] = 0xff; 
-	plaintext_[10] = 0x36; 
-	plaintext_[14] = 0x36; 
-	plaintext_[3] = 0x28; 
-	plaintext_[7] = 0x5f; 
-	plaintext_[11] = 0x01; 
-	plaintext_[15] = 0x02;
+	// plaintext_[0] = 0xa3;
+	// plaintext_[4] = 0xc5; 
+	// plaintext_[8] = 0x08; 
+	// plaintext_[12] = 0x08; 
+	// plaintext_[1] = 0x78; 
+	// plaintext_[5] = 0xa4; 
+	// plaintext_[9] = 0xff; 
+	// plaintext_[13] = 0xd3; 
+	// plaintext_[2] = 0x00; 
+	// plaintext_[6] = 0xff; 
+	// plaintext_[10] = 0x36; 
+	// plaintext_[14] = 0x36; 
+	// plaintext_[3] = 0x28; 
+	// plaintext_[7] = 0x5f; 
+	// plaintext_[11] = 0x01; 
+	// plaintext_[15] = 0x02;
 	
-	key_[0] = 0x36;
-	key_[4] = 0x8a; 
-	key_[8] = 0xc0; 
-	key_[12]= 0xf4; 
-	key_[1] = 0xed; 
-	key_[5] = 0xcf; 
-	key_[9] = 0x76; 
-	key_[13]= 0xa6; 
-	key_[2] = 0x08; 
-	key_[6] = 0xa3; 
-	key_[10]= 0xb6; 
-	key_[14]= 0x78; 
-	key_[3] = 0x31; 
-	key_[7] = 0x31; 
-	key_[11]= 0x27; 
-	key_[15]= 0x6e;
+	// key_[0] = 0x36;
+	// key_[4] = 0x8a; 
+	// key_[8] = 0xc0; 
+	// key_[12]= 0xf4; 
+	// key_[1] = 0xed; 
+	// key_[5] = 0xcf; 
+	// key_[9] = 0x76; 
+	// key_[13]= 0xa6; 
+	// key_[2] = 0x08; 
+	// key_[6] = 0xa3; 
+	// key_[10]= 0xb6; 
+	// key_[14]= 0x78; 
+	// key_[3] = 0x31; 
+	// key_[7] = 0x31; 
+	// key_[11]= 0x27; 
+	// key_[15]= 0x6e;
 }
 
 uint8_t AES::irr_poly(){
@@ -428,10 +428,10 @@ void AES::KeyExpansion(){
 
 void AES::AES_Encrypt(){
 
-	// InputPlaintext();
-	FprintfPlaintext();
-	// InputKey();
-	FprintfKey();
+	InputPlaintext();
+	// FprintfPlaintext();
+	InputKey();
+	// FprintfKey();
 	printf("\n");
 	
 	cout << "--------Encryption--------" << endl;
