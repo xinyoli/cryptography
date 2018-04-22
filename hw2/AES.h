@@ -38,7 +38,6 @@ private:
 	uint8_t irr_poly_;
 	uint8_t* plaintext_;
 	uint8_t* key_;
-	// uint8_t* round_key_;
 	vector<uint8_t*> key_vect_;
 	uint8_t* ciphertext_;
 	uint8_t* state_;

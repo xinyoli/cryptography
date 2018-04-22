@@ -51,7 +51,6 @@ AES::AES(){
 	irr_poly_ = 0x1b;
 	plaintext_ = static_cast<uint8_t*>(malloc(block_size_*sizeof(uint8_t)));
 	key_ = static_cast<uint8_t*>(malloc(key_size_*sizeof(uint8_t)));
-	// round_key_ = static_cast<uint8_t*>(malloc(key_size_*sizeof(uint8_t)));
 	key_vect_.resize(11);
 	for(int i=0; i<11; i++){
 		key_vect_[i] = static_cast<uint8_t*>(malloc(key_size_*sizeof(uint8_t)));
@@ -276,9 +275,7 @@ uint8_t AES::InvAffineTransf(uint8_t byte){
 	uint8_t result = 0x00;
 	for(int i=0; i<8; i++){
 		uint8_t temp = byte ^ transit;
-		// printf("temp = %02x xor %02x = %02x\n",byte,transit,temp);
 		temp = temp & mat[i];
-		// printf("temp = %02x\n",temp);
 		if(CountBitOdd(temp)){
 			result = result ^ digit;
 		}
@@ -440,8 +437,6 @@ void AES::AES_Encrypt(){
 	cout << "--------Encryption--------" << endl;
 	InitState();
 	InitRoundKey();
-	// cout << "Init ";
-	// PrintfState();
 	AddRoundKey(round_);
 	cout << "S" << round_ << " ";
 	PrintfState();
@@ -450,14 +445,8 @@ void AES::AES_Encrypt(){
 	while(round_ < 10){
 		// cout << "Round " << round_ << ": \n";
 		ByteSub();
-		// cout << "ByteSub ";
-		// PrintfState();
 		ShiftRows();
-		// cout << "ShiftRows ";
-		// PrintfState();
 		MixColumns();
-		// cout << "MixColumns ";
-		// PrintfState();
 		KeyExpansion();
 		AddRoundKey(round_);
 		cout << "S" << round_ << " ";
@@ -466,13 +455,8 @@ void AES::AES_Encrypt(){
 	}
 	
 	// final round
-	// cout << "Round " << round_ << ": \n";
 	ByteSub();
-	// cout << "ByteSub ";
-	// PrintfState();
 	ShiftRows();
-	// cout << "ShiftRows ";
-	// PrintfState();
 	KeyExpansion();
 	AddRoundKey(round_);
 	for(int i=0; i<block_size_; i++){
@@ -493,35 +477,21 @@ void AES::AES_Decrypt(){
 	
 	while(round_ < 10){
 		
-		cout << "Round " << round_ << ": \n";
+		// cout << "Round " << round_ << ": \n";
 		InvShiftRows();
-		cout << "InvShiftRows ";
-		// cout << "Inv ";
-		PrintfState();
 		InvByteSub();
-		cout << "InvByteSub ";
-		PrintfState();
 		AddRoundKey(10-round_);
-		cout << "AddRoundKey ";
-		PrintfState();
 		InvMixColumns();
-		// cout << "InvMixColumns";
-		// PrintfState();
 		cout << "S'" << round_ << " ";
 		PrintfState();
 		++round_;
 	}
 	
 	// final round
-	cout << "Round " << round_ << ": \n";
 	InvShiftRows();
-	cout << "InvShiftRows ";
-	PrintfState();
 	InvByteSub();
-	cout << "InvByteSub ";
-	PrintfState();
 	AddRoundKey(10-round_);
-	cout << "Plaintext: ";
+	cout << "Plantext ";
 	PrintfState();
 	printf("\n");
 	
