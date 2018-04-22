@@ -81,6 +81,7 @@ public:
 	void ShiftRows();
 	void InvShiftRows();
 	void MixColumns();
+	void InvMixColumns();
 	void KeyExpansion();
 	
 	void AES_Encrypt();

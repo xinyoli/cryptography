@@ -271,16 +271,20 @@ uint8_t AES::AffineTransf(uint8_t byte){
 uint8_t AES::InvAffineTransf(uint8_t byte){
 	uint8_t mat[8] = {0xa4, 0x49, 0x92, 0x25, 0x4a, 0x94, 0x29, 0x52};
 	// bool transit[8] = {1,1,0,0,0,1,1,0};
-	// uint8_t digit = 0x01;
-	// uint8_t result = 0x00;
-	// for(int i=0; i<8; i++){
-		// uint8_t temp = byte & mat[i];
-		// if((CountBitOdd(temp) != transit[i])){
-			// result = result ^ digit;
-		// }
-		// digit <<= 1;
-	// }
-	// return result;
+	uint8_t transit = 0x63;
+	uint8_t digit = 0x01;
+	uint8_t result = 0x00;
+	for(int i=0; i<8; i++){
+		uint8_t temp = byte ^ transit;
+		// printf("temp = %02x xor %02x = %02x\n",byte,transit,temp);
+		temp = temp & mat[i];
+		// printf("temp = %02x\n",temp);
+		if(CountBitOdd(temp)){
+			result = result ^ digit;
+		}
+		digit <<= 1;
+	}
+	return result;
 }
 
 void AES::ByteSub(){
@@ -292,8 +296,9 @@ void AES::ByteSub(){
 
 void AES::InvByteSub(){
 	for(int i=0; i<block_size_; i++){
-		state_[i] = GF256Inv(state_[i]);
+		// state_[i] = GF256Inv(state_[i]);
 		state_[i] = InvAffineTransf(state_[i]);
+		state_[i] = GF256Inv(state_[i]);
 	}
 }
 
@@ -360,6 +365,25 @@ void AES::InvShiftRows(){
 
 void AES::MixColumns(){
 	uint8_t mat[4] = {0x02,0x03,0x01,0x01};
+	uint8_t* temp_state = static_cast<uint8_t*>(malloc(block_size_*sizeof(uint8_t)));
+	for(int i=0; i<16; i++){
+		uint8_t temp;
+		temp = GF256Mult(mat[(0+3*(i/4))%4],state_[(i%4)+0]);
+		temp_state[i] = GF256Add(temp_state[i],temp);
+		temp = GF256Mult(mat[(1+3*(i/4))%4],state_[(i%4)+4]);
+		temp_state[i] = GF256Add(temp_state[i],temp);
+		temp = GF256Mult(mat[(2+3*(i/4))%4],state_[(i%4)+8]);
+		temp_state[i] = GF256Add(temp_state[i],temp);
+		temp = GF256Mult(mat[(3+3*(i/4))%4],state_[(i%4)+12]);
+		temp_state[i] = GF256Add(temp_state[i],temp);
+	}
+	for(int i=0; i<block_size_; i++){
+		state_[i] = temp_state[i];
+	}
+}
+
+void AES::InvMixColumns(){
+	uint8_t mat[4] = {0x0e,0x0b,0x0d,0x09};
 	uint8_t* temp_state = static_cast<uint8_t*>(malloc(block_size_*sizeof(uint8_t)));
 	for(int i=0; i<16; i++){
 		uint8_t temp;
@@ -467,33 +491,39 @@ void AES::AES_Decrypt(){
 	PrintfState();
 	++round_;
 	
-	while(round_ < 2){
-		
-		
+	while(round_ < 10){
 		
 		cout << "Round " << round_ << ": \n";
 		InvShiftRows();
 		cout << "InvShiftRows ";
 		// cout << "Inv ";
 		PrintfState();
-		
-		
-		
-		
-		// ByteSub();
-		// cout << "ByteSub ";
+		InvByteSub();
+		cout << "InvByteSub ";
+		PrintfState();
+		AddRoundKey(10-round_);
+		cout << "AddRoundKey ";
+		PrintfState();
+		InvMixColumns();
+		// cout << "InvMixColumns";
 		// PrintfState();
-		// ShiftRows();
-		// cout << "ShiftRows ";
-		// PrintfState();
-		// MixColumns();
-		// cout << "MixColumns ";
-		// PrintfState();
-		// KeyExpansion();
-		// AddRoundKey(round_);
-		// cout << "S" << round_ << " ";
-		// PrintfState();
+		cout << "S'" << round_ << " ";
+		PrintfState();
 		++round_;
 	}
+	
+	// final round
+	cout << "Round " << round_ << ": \n";
+	InvShiftRows();
+	cout << "InvShiftRows ";
+	PrintfState();
+	InvByteSub();
+	cout << "InvByteSub ";
+	PrintfState();
+	AddRoundKey(10-round_);
+	cout << "Plaintext: ";
+	PrintfState();
+	printf("\n");
+	
 }
 
