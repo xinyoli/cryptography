@@ -78,22 +78,31 @@ def GenPrime256():
 	return n
 
 def PrintPrime256(p):
-	# print('{:x}'.format(p))
-
 	str_p = str('{:x}'.format(p))
-	# print(str_p)
 	for i in range(8):
 		print(str_p[8*i:8*i+8], end=' ')
 	print("\n")
 
 def PrintBigNum(n):
-	str_n = str('{:x}'.format(n))
-	r = len(str_n) % 8;
-	q = len(str_n) // 8;
-	print(str_n[8*q+r:8*q], end=' ')
-	for i in range(q):
-		print(str_n[8*i:8*i+8], end=' ')
-	print("\n")
+	# str_n = str('{:x}'.format(n))
+	# str_n = hex(n)
+	# print("-----------PrintBigNum---------------")
+	str_n = format(n, 'x')
+	# print(str_n)
+	
+	length = len(str_n)
+	# print(length)
+	if length < 8:
+		print(str_n)
+	else:	
+		r = length % 8
+		# print(r)
+		q = length // 8
+		# print(q)
+		print(str_n[0:r], end=' ')
+		for i in range(q):
+			print(str_n[r+8*i:r+8*i+8], end=' ')
+		print("")
 
 def GenPrime128():
 	n = secrets.randbits(128)
@@ -109,9 +118,23 @@ def RabinEnc(m, p=0, q=0):
 
 	n = p * q
 	
-	print("p = ", hex(p))
-	print("q = ", hex(q))
-	print("n = ", hex(n))
-	print("Plaintext: ", hex(m))
+	print("p = ", end='')
+	PrintBigNum(p)
+	print("q = ", end='')
+	PrintBigNum(q)
+	print("n = ", end='')
+	PrintBigNum(n)
+	print("\nPlaintext: ", end='')
+	PrintBigNum(m)
 	
-	return pow(m, 2, n)
+	
+	last16 = m & 0xffff
+	# print("m last16: ", end='')
+	# PrintBigNum(last16)
+	m_append = (m << 16) + last16
+	# print("m appended: ", end='')
+	# PrintBigNum(m_append)
+	# print(m)
+	# print(hex(m_append))
+	
+	return pow(m_append, 2, n)

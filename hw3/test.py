@@ -27,5 +27,18 @@ import rabinRSA
 
 # print(SmallPrimeTest(1223))
 
-p = rabinRSA.GenPrime256()
-print("an 256-bit prime number: \n", hex(p))
+# p = rabinRSA.GenPrime256()
+# print("an 256-bit prime number: \n", hex(p))
+
+m = 0xbe000bad_bebadbad_bad00deb_deadface_deafbeef_add00add_bed00bed
+# print("Plaintext: ", end='')
+# rabinRSA.PrintBigNum(m)
+last16 = (m & 0xffff)
+# print("m last16: ", end='')
+# rabinRSA.PrintBigNum(last16)
+m_append = (m << 16) + last16
+print("m appended: ", end='')
+rabinRSA.PrintBigNum(m_append)
+print("m appended: ", end='')
+print(hex(m_append))
+
