@@ -1,3 +1,12 @@
+#######################################################
+# file: rabinRSA.py
+# Project: COM 5336 cyptography hw assignment3
+# Description: 
+#	implement Rabin crypto-system
+#
+# Change history: May. 14, 2018 - file created.
+#
+#######################################################
 import random
 import secrets
 
@@ -75,5 +84,34 @@ def PrintPrime256(p):
 	# print(str_p)
 	for i in range(8):
 		print(str_p[8*i:8*i+8], end=' ')
+	print("\n")
 
+def PrintBigNum(n):
+	str_n = str('{:x}'.format(n))
+	r = len(str_n) % 8;
+	q = len(str_n) // 8;
+	print(str_n[8*q+r:8*q], end=' ')
+	for i in range(q):
+		print(str_n[8*i:8*i+8], end=' ')
+	print("\n")
 
+def GenPrime128():
+	n = secrets.randbits(128)
+	while not MillerRabin(n):
+		n = secrets.randbits(128)
+	return n
+
+def RabinEnc(m, p=0, q=0):
+	if(p == 0):
+		p = GenPrime128()
+	if(q == 0):
+		q = GenPrime128()
+
+	n = p * q
+	
+	print("p = ", hex(p))
+	print("q = ", hex(q))
+	print("n = ", hex(n))
+	print("Plaintext: ", hex(m))
+	
+	return pow(m, 2, n)
