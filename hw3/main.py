@@ -11,4 +11,6 @@
 import rabinRSA
 
 p = rabinRSA.GenPrime256()
-print("an 256-bit prime number: \n", hex(p))
+print("<Miller-Robin>")
+rabinRSA.PrintPrime256(p)
+

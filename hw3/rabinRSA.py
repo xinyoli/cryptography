@@ -65,10 +65,15 @@ def MillerRabin(n, t=10):	# n: should be a positive odd number, t: number of rep
 def GenPrime256():
 	n = secrets.randbits(256)
 	while not MillerRabin(n):
-		# print(hex(n), "is a composition!")
 		n = secrets.randbits(256)
-	# print(hex(n), "is a prime!")
 	return n
-	
+
+def PrintPrime256(p):
+	# print('{:x}'.format(p))
+
+	str_p = str('{:x}'.format(p))
+	# print(str_p)
+	for i in range(8):
+		print(str_p[8*i:8*i+8], end=' ')
 
 

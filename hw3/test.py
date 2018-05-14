@@ -27,3 +27,5 @@ import rabinRSA
 
 # print(SmallPrimeTest(1223))
 
+p = rabinRSA.GenPrime256()
+print("an 256-bit prime number: \n", hex(p))
