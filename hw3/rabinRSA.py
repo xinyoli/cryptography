@@ -77,7 +77,7 @@ def InputHex():
 	
 def GenPrime128():
 	n = secrets.randbits(128)
-	while not MillerRabin(n):
+	while not MillerRabin(n) and ((n % 4 == 3) or (n % 8 == 5)):
 		n = secrets.randbits(128)
 	return n
 	
