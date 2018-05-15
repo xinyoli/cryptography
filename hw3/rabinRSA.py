@@ -77,28 +77,15 @@ def GenPrime256():
 		n = secrets.randbits(256)
 	return n
 
-def PrintPrime256(p):
-	str_p = str('{:x}'.format(p))
-	for i in range(8):
-		print(str_p[8*i:8*i+8], end=' ')
-	print("\n")
-
 def PrintBigNum(n):
-	# str_n = str('{:x}'.format(n))
-	# str_n = hex(n)
-	# print("-----------PrintBigNum---------------")
 	str_n = format(n, 'x')
-	# print(str_n)
 	
 	length = len(str_n)
-	# print(length)
 	if length < 8:
 		print(str_n)
 	else:	
 		r = length % 8
-		# print(r)
 		q = length // 8
-		# print(q)
 		print(str_n[0:r], end=' ')
 		for i in range(q):
 			print(str_n[r+8*i:r+8*i+8], end=' ')
@@ -217,17 +204,29 @@ def RabinDec(c, p, q):
 	else:
 		print("Legendre symbol of q fail.")
 	
-	print("r: ", end='')
-	PrintBigNum(r)
-	print("ri: ", end='')
-	PrintBigNum(ri)
-	print("s: ", end='')
-	PrintBigNum(s)
-	print("si: ", end='')
-	PrintBigNum(si)
+	# print("r: ", end='')
+	# PrintBigNum(r)
+	# print("ri: ", end='')
+	# PrintBigNum(ri)
+	# print("s: ", end='')
+	# PrintBigNum(s)
+	# print("si: ", end='')
+	# PrintBigNum(si)
 	
 	# find c, d
+	n = p*q
 	c, d = xgcd(p, q)
-	x = r*d*q + s*c*p
-	xi = ri*d*q + si*c*p
+	x = (r*d*q + s*c*p) % n
+	xi = (ri*d*q + si*c*p) % n
+	y = (r*d*q - s*c*p) % n
+	yi = (ri*d*q - si*c*p) % n
+	
+	print("m1: ", end='')
+	PrintBigNum(x)
+	print("m2: ", end='')
+	PrintBigNum(xi)
+	print("m3: ", end='')
+	PrintBigNum(y)
+	print("m4: ", end='')
+	PrintBigNum(yi)
 	
