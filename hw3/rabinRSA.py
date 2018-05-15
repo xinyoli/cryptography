@@ -70,6 +70,16 @@ def MillerRabin(n, t=10):	# n: should be a positive odd number, t: number of rep
 			return False
 	return True
 
+def InputHex():
+	str = input()
+	str = str.replace(" ","")
+	return int(str,16)
+	
+def GenPrime128():
+	n = secrets.randbits(128)
+	while not MillerRabin(n):
+		n = secrets.randbits(128)
+	return n
 	
 def GenPrime256():
 	n = secrets.randbits(256)
@@ -105,32 +115,29 @@ def GenPrime128():
 		n = secrets.randbits(128)
 	return n
 
-def RabinEnc(m, p=0, q=0):
-	if(p == 0):
-		p = GenPrime128()
-	if(q == 0):
-		q = GenPrime128()
-
-	n = p * q
+def RabinEnc(m=0, p=0, q=0):
 	
 	print("p = ", end='')
-	PrintBigNum(p)
+	if(p == 0):
+		p = InputHex()
+	else:
+		PrintBigNum(p)
 	print("q = ", end='')
-	PrintBigNum(q)
+	if(q == 0):
+		q = InputHex()
+	else:
+		PrintBigNum(q)
 	print("n = ", end='')
+	n = p * q
 	PrintBigNum(n)
 	print("\nPlaintext: ", end='')
-	PrintBigNum(m)
-	
+	if m == 0:
+		m = InputHex()
+	else:
+		PrintBigNum(m)
 	
 	last16 = m & 0xffff
-	# print("m last16: ", end='')
-	# PrintBigNum(last16)
 	m_append = (m << 16) + last16
-	# print("m appended: ", end='')
-	# PrintBigNum(m_append)
-	# print(m)
-	# print(hex(m_append))
 	
 	return pow(m_append, 2, n)
 
@@ -144,15 +151,24 @@ def xgcd(b, a):
         t0, t1 = t1, t0 - q * t1
     return  s0, t0
 	
-def RabinDec(c, p, q):
+def RabinDec(c=0, p=0, q=0):
 
 	print("Ciphertext = ", end='')
-	PrintBigNum(c)
+	if(c == 0):
+		c = InputHex()
+	else:
+		PrintBigNum(c)
 	print("Private Key: ")
 	print("p = ", end='')
-	PrintBigNum(p)
+	if(p == 0):
+		p = InputHex()
+	else:
+		PrintBigNum(p)
 	print("q = ", end='')
-	PrintBigNum(q)
+	if(q == 0):
+		q = InputHex()
+	else:
+		PrintBigNum(q)
 
 	r = 0
 	ri = 0
@@ -162,15 +178,6 @@ def RabinDec(c, p, q):
 	elif p % 4 == 3:
 		power = (p + 1) // 4
 		r = pow(c, power, p)
-		# if power & 1 == 1:
-			# r = a % p
-			# power -= 1
-		# else:
-			# r = pow(a,2,p)
-			# power -= 2
-		# while power > 0:
-			# r = pow(r,2,p)
-			# power -= 2
 		ri = pow(r, p-2, p)
 	elif p % 8 == 5:
 		power = (p-1)/4
@@ -212,15 +219,6 @@ def RabinDec(c, p, q):
 	else:
 		print("Legendre symbol of q fail.")
 	
-	# print("r: ", end='')
-	# PrintBigNum(r)
-	# print("ri: ", end='')
-	# PrintBigNum(ri)
-	# print("s: ", end='')
-	# PrintBigNum(s)
-	# print("si: ", end='')
-	# PrintBigNum(si)
-	
 	# find c, d
 	n = p*q
 	c, d = xgcd(p, q)
@@ -228,15 +226,6 @@ def RabinDec(c, p, q):
 	xi = (ri*d*q + si*c*p) % n
 	y = (r*d*q - s*c*p) % n
 	yi = (ri*d*q - si*c*p) % n
-	
-	# print("m1: ", end='')
-	# PrintBigNum(x)
-	# print("m2: ", end='')
-	# PrintBigNum(xi)
-	# print("m3: ", end='')
-	# PrintBigNum(y)
-	# print("m4: ", end='')
-	# PrintBigNum(yi)
 	
 	if ((x & 0xffff) == ((x & 0xffff0000)>>16)):
 		return x >> 16

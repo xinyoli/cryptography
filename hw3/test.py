@@ -42,6 +42,14 @@ import rabinRSA
 # print("m appended: ", end='')
 # print(hex(m_append))
 
-a, b = 46, 240
-s, t = rabinRSA.xgcd(a,b)
-print("xgcd(",a,",",b,"): \ns =", s, "t =", t)
+# a, b = 46, 240
+# s, t = rabinRSA.xgcd(a,b)
+# print("xgcd(",a,",",b,"): \ns =", s, "t =", t)
+
+p = input("enter p = ")
+p = p.replace(" ","")
+print(p)
+print(type(p))
+hex_int = int(p, 16)
+# hex_int = hex(p)
+print(hex(hex_int))
