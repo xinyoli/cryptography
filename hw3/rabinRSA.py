@@ -77,6 +77,14 @@ def GenPrime256():
 		n = secrets.randbits(256)
 	return n
 
+def PrintBigNumHex56(n):
+	str_n = format(n, '056x')
+	
+	length = len(str_n)
+	for i in range(7):
+		print(str_n[8*i:8*i+8], end=' ')
+	print("")
+	
 def PrintBigNum(n):
 	str_n = format(n, 'x')
 	
@@ -221,12 +229,24 @@ def RabinDec(c, p, q):
 	y = (r*d*q - s*c*p) % n
 	yi = (ri*d*q - si*c*p) % n
 	
-	print("m1: ", end='')
-	PrintBigNum(x)
-	print("m2: ", end='')
-	PrintBigNum(xi)
-	print("m3: ", end='')
-	PrintBigNum(y)
-	print("m4: ", end='')
-	PrintBigNum(yi)
+	# print("m1: ", end='')
+	# PrintBigNum(x)
+	# print("m2: ", end='')
+	# PrintBigNum(xi)
+	# print("m3: ", end='')
+	# PrintBigNum(y)
+	# print("m4: ", end='')
+	# PrintBigNum(yi)
+	
+	if ((x & 0xffff) == ((x & 0xffff0000)>>16)):
+		return x >> 16
+	elif ((xi & 0xffff) == ((xi & 0xffff0000)>>16)):
+		return xi >> 16
+	elif ((y & 0xffff) == ((y & 0xffff0000)>>16)):
+		return y >> 16
+	elif ((yi & 0xffff) == ((yi & 0xffff0000)>>16)):
+		return yi >> 16
+	else:
+		print("error!!! decryption fail!!!")
+		return False
 	
