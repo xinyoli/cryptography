@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #######################################################
 # file: rabinRSA.py
 # Project: COM 5336 cyptography hw assignment3
