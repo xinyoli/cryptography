@@ -138,6 +138,16 @@ def RabinEnc(m, p=0, q=0):
 	# print(hex(m_append))
 	
 	return pow(m_append, 2, n)
+
+
+# extended Euclidean, return (s, t), such that as + bt = g = gcd(a, b).
+def xgcd(b, a):
+    s0, s1, t0, t1 = 1, 0, 0, 1
+    while a != 0:
+        q, b, a = b // a, a, b % a
+        s0, s1 = s1, s0 - q * s1
+        t0, t1 = t1, t0 - q * t1
+    return  s0, t0
 	
 def RabinDec(c, p, q):
 
@@ -149,70 +159,75 @@ def RabinDec(c, p, q):
 	print("q = ", end='')
 	PrintBigNum(q)
 
-	rp = 0
-	rpi = 0
+	r = 0
+	ri = 0
 	# find sqroot in p
 	if c % p == 0:
 		print("Legendre symbol of p fail.")
 	elif p % 4 == 3:
 		power = (p + 1) // 4
-		rp = pow(c, power, p)
+		r = pow(c, power, p)
 		# if power & 1 == 1:
-			# rp = a % p
+			# r = a % p
 			# power -= 1
 		# else:
-			# rp = pow(a,2,p)
+			# r = pow(a,2,p)
 			# power -= 2
 		# while power > 0:
-			# rp = pow(rp,2,p)
+			# r = pow(r,2,p)
 			# power -= 2
-		rpi = pow(rp, p-2, p)
+		ri = pow(r, p-2, p)
 	elif p % 8 == 5:
 		power = (p-1)/4
 		d = pow(c, power, p)
 		if d == 1:
-			rp = pow(c, (p+3)//8, p)
+			r = pow(c, (p+3)//8, p)
 		elif d == -1:
 			temp = (4*c) % p
 			temp = pow(temp, (p-5)//8 , p)
-			rp = (2*c*temp) % p
-			rpi = pow(rp, p-2, p)
+			r = (2*c*temp) % p
+			ri = pow(r, p-2, p)
 		else:
 			print("error occour in RabinDec.")
 	else:
 		print("Legendre symbol of p fail.")
 	
 	
-	rq = 0
-	rqi = 0
+	s = 0
+	si = 0
 	# find sqroot in q
 	if c % q == 0:
 		print("Legendre symbol of q fail.")
 	elif q % 4 == 3:
 		power = (q + 1) // 4
-		rq = pow(c, power, q)
-		rqi = pow(rq, q-2, q)
+		s = pow(c, power, q)
+		si = pow(s, q-2, q)
 	elif q % 8 == 5:
 		power = (q-1)/4
 		d = pow(c, power, q)
 		if d == 1:
-			rq = pow(c, (q+3)//8, q)
+			s = pow(c, (q+3)//8, q)
 		elif d == -1:
 			temp = (4*c) % q
 			temp = pow(temp, (q-5)//8 , q)
-			rq = (2*c*temp) % q
-			rqi = pow(rq, q-2, q)
+			s = (2*c*temp) % q
+			si = pow(s, q-2, q)
 		else:
 			print("error occour in RabinDec.")
 	else:
 		print("Legendre symbol of q fail.")
 	
-	print("m1: ", end='')
-	PrintBigNum(rp)
-	print("m2: ", end='')
-	PrintBigNum(rpi)
-	print("m3: ", end='')
-	PrintBigNum(rq)
-	print("m4: ", end='')
-	PrintBigNum(rqi)
+	print("r: ", end='')
+	PrintBigNum(r)
+	print("ri: ", end='')
+	PrintBigNum(ri)
+	print("s: ", end='')
+	PrintBigNum(s)
+	print("si: ", end='')
+	PrintBigNum(si)
+	
+	# find c, d
+	c, d = xgcd(p, q)
+	x = r*d*q + s*c*p
+	xi = ri*d*q + si*c*p
 	
