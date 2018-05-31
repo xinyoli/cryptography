@@ -154,6 +154,8 @@ def xgcd(b, a):
 	
 def RabinDec(c=0, p=0, q=0):
 
+	n = p*q
+
 	print("Ciphertext = ", end='')
 	if(c == 0):
 		c = InputHex()
@@ -179,7 +181,8 @@ def RabinDec(c=0, p=0, q=0):
 	elif p % 4 == 3:
 		power = (p + 1) // 4
 		r = pow(c, power, p)
-		ri = pow(r, p-2, p)
+		# ri = pow(r, p-2, p)
+		ri = n - r
 	elif p % 8 == 5:
 		power = (p-1)/4
 		d = pow(c, power, p)
@@ -189,7 +192,8 @@ def RabinDec(c=0, p=0, q=0):
 			temp = (4*c) % p
 			temp = pow(temp, (p-5)//8 , p)
 			r = (2*c*temp) % p
-			ri = pow(r, p-2, p)
+			# ri = pow(r, p-2, p)
+			ri = n - r
 		else:
 			print("error occour in RabinDec.")
 	else:
@@ -204,7 +208,8 @@ def RabinDec(c=0, p=0, q=0):
 	elif q % 4 == 3:
 		power = (q + 1) // 4
 		s = pow(c, power, q)
-		si = pow(s, q-2, q)
+		# si = pow(s, q-2, q)
+		si = n - s
 	elif q % 8 == 5:
 		power = (q-1)/4
 		d = pow(c, power, q)
@@ -214,14 +219,14 @@ def RabinDec(c=0, p=0, q=0):
 			temp = (4*c) % q
 			temp = pow(temp, (q-5)//8 , q)
 			s = (2*c*temp) % q
-			si = pow(s, q-2, q)
+			# si = pow(s, q-2, q)
+			si = n - s
 		else:
 			print("error occour in RabinDec.")
 	else:
 		print("Legendre symbol of q fail.")
 	
 	# find c, d
-	n = p*q
 	c, d = xgcd(p, q)
 	x = (r*d*q + s*c*p) % n
 	xi = (ri*d*q + si*c*p) % n
